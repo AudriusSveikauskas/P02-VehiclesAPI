@@ -58,7 +58,8 @@ class CarController {
      * @return all information for the requested vehicle
      */
     @GetMapping("/{id}")
-    ResponseEntity<Car> get(@PathVariable Long id) {
+    //ResponseEntity<Car> get(@PathVariable Long id) {
+    Resource<Car> get(@PathVariable Long id) {
         /**
          * TODO: Use the `findById` method from the Car Service to get car information.
          * TODO: Use the `assembler` on that car and return the resulting output.
@@ -66,8 +67,9 @@ class CarController {
          */
 
         /** Done */
-        Car car = carService.findById(id);
-        return ResponseEntity.ok(car);
+        Car car = this.carService.findById(id);
+        //return ResponseEntity.ok(car);
+        return assembler.toResource(car);
 
     }
 

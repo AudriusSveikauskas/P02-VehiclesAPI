@@ -3,9 +3,7 @@ package com.udacity.vehicles.api;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -29,6 +27,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -145,6 +144,28 @@ public class CarControllerTest {
         mvc.perform(delete(new URI("/cars/1")).accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isNoContent());
     }
+
+
+    @Test
+    public void updateCar() throws Exception {
+        Car baseCar = getCar();
+        Details details = baseCar.getDetails();
+        baseCar.setCondition(Condition.NEW);
+        details.setBody("coupe");
+        details.setModel("Camaro");
+        details.setNumberOfDoors(2);
+
+        Car car = new Car();
+        car.setCondition(Condition.NEW);
+        car.setDetails(baseCar.getDetails());
+
+        mvc.perform(put(new URI("/cars/1"))
+                        .content(json.write(car).getJson())
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().is(HttpStatus.OK.value()));
+    }
+
 
     /**
      * Creates an example Car object for use in testing.
