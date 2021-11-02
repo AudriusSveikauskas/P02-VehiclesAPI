@@ -15,6 +15,7 @@ import javax.validation.Valid;
 
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,7 +45,7 @@ class CarController {
      * Creates a list to store any vehicles.
      * @return list of vehicles
      */
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     Resources<Resource<Car>> list() {
         List<Resource<Car>> resources = carService.list().stream().map(assembler::toResource)
                 .collect(Collectors.toList());
@@ -57,8 +58,7 @@ class CarController {
      * @param id the id number of the given vehicle
      * @return all information for the requested vehicle
      */
-    @GetMapping("/{id}")
-    //ResponseEntity<Car> get(@PathVariable Long id) {
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     Resource<Car> get(@PathVariable Long id) {
         /**
          * TODO: Use the `findById` method from the Car Service to get car information.
@@ -68,7 +68,6 @@ class CarController {
 
         /** Done */
         Car car = this.carService.findById(id);
-        //return ResponseEntity.ok(car);
         return assembler.toResource(car);
 
     }
@@ -89,7 +88,8 @@ class CarController {
 
         /** Done */
         Car saveCar = carService.save(car);
-        return ResponseEntity.created(new URI("/cars/" + saveCar.getId())).body(saveCar);
+        Resource<Car> resource = assembler.toResource(saveCar);
+        return ResponseEntity.created(new URI("/cars/" + saveCar.getId())).body(resource);
 
     }
 
@@ -111,7 +111,8 @@ class CarController {
         /** Done */
         car.setId(id);
         Car updateCar = carService.save(car);
-        return ResponseEntity.ok(updateCar);
+        Resource<Car> resource = assembler.toResource(updateCar);
+        return ResponseEntity.ok(resource);
 
     }
 

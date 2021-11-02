@@ -1,4 +1,4 @@
-package com.udacity.pricing.domain.price;
+package com.udacity.pricing.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

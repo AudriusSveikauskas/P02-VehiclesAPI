@@ -1,6 +1,6 @@
 package com.udacity.pricing.service;
 
-import com.udacity.pricing.domain.price.Price;
+import com.udacity.pricing.entity.Price;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -18,7 +18,7 @@ public class PricingService {
      * Holds {ID: Price} pairings (current implementation allows for 20 vehicles)
      */
     private static final Map<Long, Price> PRICES = LongStream
-            .range(1, 20)
+            .range(1, 21)
             .mapToObj(i -> new Price("USD", randomPrice(), i))
             .collect(Collectors.toMap(Price::getVehicleId, p -> p));
 
